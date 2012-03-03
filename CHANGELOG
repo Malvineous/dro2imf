@@ -1,0 +1,16 @@
+Version 1.1 by NY00123
+ - Code converted to plain C
+ - Copyright notice on the top of the source file updated
+ - v2.0 DRO files are now supported
+ - Various IMF rates can now be accepted (560Hz for Keen, 700Hz for Wolf3D, etc)
+ - Type-0 IMF format is now supported
+ - Incompatible version message changed as v2.0 support has been added, along
+   with the fact that v1.0 is, in fact, v0.1 (according to some technical
+   details)
+ - For v0.1 DRO files, check the hardware type length (1 byte, or 4 bytes long?)
+ - v2.0 DRO files: A corresponding error is returned whenever any of
+   the following is detected: Compression, too long code map, unknown "format"
+ - Restructured command line argument parsing
+
+Version 1.0 by malvineous@shikadi.net
+ - Initial release
