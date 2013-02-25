@@ -1,3 +1,9 @@
+Version 1.2 by K1n9_Duk3
+ - Delays are now calculated as floating point values with double precision and 
+   the fractional part of the delays is kept, so that it may add up over time 
+   and keep the length of the IMF song (in seconds) closer to the length of the 
+   DRO song.
+
 Version 1.1 by NY00123
  - Code converted to plain C
  - Copyright notice on the top of the source file updated

@@ -1,13 +1,15 @@
 /*
-DRO2IMF v1.1 - Convert DOSBox OPL captures to id Software Music Format
+DRO2IMF v1.2 - Convert DOSBox OPL captures to id Software Music Format
 
 IMF songs are used in many Apogee games, from Commander Keen to Duke
 Nukem II.  There is also a converter available to convert IMF files into
 MIDI files.
 
 Written by malvineous@shikadi.net in June 2007, modified by NY00123
-in February 2012.  Feel free to do what you want with this code, but if you
-make use of it please give credit where credit is due :-)
+in February 2012 and by K1n9_Duk3 in February 2013.
+
+Feel free to do what you want with this code, but if you make use of it
+please give credit where credit is due :-)
 
 http://www.shikadi.net/utils/
 */
@@ -137,6 +139,8 @@ int main(int iArgC, char *cArgV[])
 
 int convert(FILE *hDRO, FILE *hIMF, int iIMFRate, int iIMFTypeNum)
 {
+	double dLastDelay = 0.0; /* v1.2: For more accurate delays */
+
 	uint8_t cSig[8];
 	fread(cSig, 8, 1, hDRO);
 	if (strncmp((char *)cSig, "DBRAWOPL", 8) != 0) {
@@ -233,7 +237,20 @@ int convert(FILE *hDRO, FILE *hIMF, int iIMFRate, int iIMFTypeNum)
 				DRO runs at 1000Hz (delays are in milliseconds),
 				while the IMF rate can be 560Hz, 700Hz, etc.
 				*/
-				writeUINT16LE(hIMF, (uint16_t)(iLastDelay * iIMFRate / 1000));
+
+				/*
+				Version 1.2:
+				Calculate delay with double precision and keep the
+				fractional part (difference between the floating
+				point and the integer value) in dLastDelay, so that
+				they may add up over time. Otherwise the IMF file
+				might end up being a few seconds shorter than the
+				original DRO file.
+				*/
+				dLastDelay += (iLastDelay * iIMFRate) / 1000.0;
+				iLastDelay = (uint16_t) dLastDelay;
+				dLastDelay -= iLastDelay;
+				writeUINT16LE(hIMF, iLastDelay);
 
 				fread(&iData, 1, 1, hDRO);
 				fwrite(iCodeMap + iRegIndex, 1, 1, hIMF);
@@ -308,7 +325,20 @@ int convert(FILE *hDRO, FILE *hIMF, int iIMFRate, int iIMFTypeNum)
 					DRO runs at 1000Hz (delays are in milliseconds),
 					while the IMF rate can be 560Hz, 700Hz, etc.
 					*/
-					writeUINT16LE(hIMF, (uint16_t)(iLastDelay * iIMFRate / 1000));
+
+					/*
+					Version 1.2:
+					Calculate delay with double precision and keep the
+					fractional part (difference between the floating
+					point and the integer value) in dLastDelay, so that
+					they may add up over time. Otherwise the IMF file
+					might end up being a few seconds shorter than the
+					original DRO file.
+					*/
+					dLastDelay += (iLastDelay * iIMFRate) / 1000.0;
+					iLastDelay = (uint16_t) dLastDelay;
+					dLastDelay -= iLastDelay;
+					writeUINT16LE(hIMF, iLastDelay);
 
 					fread(&iData, 1, 1, hDRO);
 					iLen++;
