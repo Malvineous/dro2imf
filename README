@@ -1,0 +1,23 @@
+DOSBox OPL capture to id Software Music Format converter.
+Written by malvineous@shikadi.net in June 2007.
+
+Usage: dro2imf -in <drofile> -out <imffile> [optional arguments]
+
+ drofile is the DOSBox capture to convert.
+ imffile is the output IMF file that will be created.
+
+Optional arguments:
+-rate <rate>: IMF rate in Hz. By default, 560Hz is set (for Keen).
+-type <type>: Output a Type-0 IMF file (Keen) or a Type-1 file (Wolf3D),
+passing 0 or 1 after "-type". By default, Type-0 is chosen.
+-tags <title> <composer> <remarks>: IMF tags. Use with Type-1 files.
+
+* IMF rates to use: 560Hz for Commander Keen,
+700Hz for Wolfenstein 3D, 280Hz for Duke Nukem II.
+* IMF tags are optional, but if given all three tags must be specified
+(use "" to leave a field blank).
+
+Examples:
+dro2imf -in mycapt.dro -out convcapt.imf
+dro2imf -in rmus.dro -out omus.wlf -rate 700 -type 1 -tags "My song" Squirb ""
+
